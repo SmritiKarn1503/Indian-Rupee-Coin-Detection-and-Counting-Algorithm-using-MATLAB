@@ -1,0 +1,42 @@
+clc;
+clear all;
+close all;
+coin=imread('fin.jpg');
+figure(1);
+subplot(2,2,1);
+imshow(coin),title('Original Image');
+BW_im = im2bw(coin);
+subplot(2,2,2);
+imshow(BW_im),title('Thresholded Image/ B/W Image');
+BW_out = ~BW_im;
+subplot(2,2,3);
+imshow(BW_out),title('Complemented Image');
+BW_output = imfill(BW_out,'holes');
+BW = bwpropfilt(BW_out, 'Area', [70000, 110443]);
+subplot(2,2,4);
+imshow(BW);
+
+
+[L Ne]=bwlabel(BW);
+pt=regionprops(L,'Area','Centroid');
+total=0;
+hold on;
+for n=1:size(pt,1)
+    rup=pt(n).Centroid;
+    X=rup(1);
+    Y=rup(2);
+
+    if (pt(n).Area <  90000)
+        text(X-10,Y,'2');
+        total=total+1;      
+    else
+        text(X-10,Y,'1');
+        total=total+1;
+    end
+   
+end
+
+number=n;
+rupees=total;
+hold on;
+title(['Rupees : Rs.', num2str(rupees), '       ', 'Number of coins:', num2str(n)]);
